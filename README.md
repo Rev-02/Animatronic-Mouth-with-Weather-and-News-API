@@ -1,4 +1,4 @@
-#Animatronic Mouth
+# Animatronic Mouth
 
 A mouth that moves when talking, controlled by an Arduino over serial port. 
 The software uses web APIs to fetch current and forecast weather data for a specific location.
