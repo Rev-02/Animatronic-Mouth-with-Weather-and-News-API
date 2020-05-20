@@ -55,7 +55,7 @@ namespace ttsApp
 
         public TopNews GetTopNews(string countryCode)
         {
-            string urlParameters = "?country="+countryCode+ "&apiKey="+Key;
+            string urlParameters = "?country="+countryCode+"&apiKey="+Key;
             //urlParameters = "?lon=4.55&appid=0acc67f54faacb1b6040ccbbd8f38a3f";
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(BASE+EXTENSION);

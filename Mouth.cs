@@ -60,6 +60,7 @@ namespace ttsApp
             speakRate.AppendText(Message, PromptRate.Slow);
             speakRate.EndVoice();
             speak.Speak(speakRate);
+            speakRate.ClearContent();
         }
 
         public void synthVisemeReached(object sender, VisemeReachedEventArgs e)
