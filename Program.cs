@@ -16,7 +16,7 @@ namespace ttsApp
         {
             reader keyreader = new reader();
             string[] keys = keyreader.ReadKeys();
-            Mouth m = new Mouth("COM9", "Microsoft David Desktop");
+            Mouth m = new Mouth("COM4", "Microsoft David Desktop");
             NewsApiTop newsAPI = new NewsApiTop(keys[0]);
             OWMForecast oWMForecast = new OWMForecast(keys[1]);
             OWMCurrent oWM = new OWMCurrent(keys[1]);
@@ -85,7 +85,7 @@ namespace ttsApp
                 {
                     today = true;
                     mouth.speakMsg(string.Format("The average temperature today will be {0:f1} Degrees C", interpreter.CalcAverageForecastTemp(fc, day)));
-                    mouth.speakMsg(string.Format("The weather today will be {0} .", interpreter.CalcForecastMain(fc, day)));
+                    mouth.speakMsg(string.Format("The forecast for later today will be {0} .", interpreter.CalcForecastMain(fc, day)));
                 }
             }
             if (today)

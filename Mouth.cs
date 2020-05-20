@@ -25,7 +25,7 @@ namespace ttsApp
             positions = rdr.ReadFile();
             try
             {
-                port = new SerialPort("COM9", 115200);
+                port = new SerialPort(portNum, 115200);
                 port.Open();
             }
             catch (Exception e)
