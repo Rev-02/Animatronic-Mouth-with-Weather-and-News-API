@@ -5,6 +5,9 @@ The software uses web APIs to fetch current and forecast weather data for a spec
 It also fetches current news articles for a country or worldwide.
 Using:
 - Open weather map
+    - Current Weather API
+    - 5 day / 3 hour forecast
 - NewsAPI.org
+    - top headlines (Country based)
 
 Written in C# using the microsoft SSAPI for TTS and JSON for the API data.
