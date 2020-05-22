@@ -7,16 +7,29 @@ using System.Speech.Synthesis;
 using System.IO.Ports;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
+using System.Threading;
+using System.Globalization;
 
 namespace ttsApp
 {
     class Program
     {
-        static void Main(string[] args)
+
+        static void Main(string [] args)
+        {
+            ParameterizedThreadStart Eyes = new ParameterizedThreadStart(processEyes);
+            Mouth m = new Mouth("COM4", "Microsoft David Desktop");
+            // start them  
+            Thread Eyethread = new Thread(Eyes);
+            Eyethread.Start(m);
+            
+        }
+
+        static void MainLoop(object mouth)
         {
             reader keyreader = new reader();
             string[] keys = keyreader.ReadKeys();
-            Mouth m = new Mouth("COM4", "Microsoft David Desktop");
+            
             NewsApiTop newsAPI = new NewsApiTop(keys[0]);
             OWMForecast oWMForecast = new OWMForecast(keys[1]);
             OWMCurrent oWM = new OWMCurrent(keys[1]);
@@ -99,6 +112,13 @@ namespace ttsApp
                 mouth.speakMsg(string.Format("The average temperature for {1:dddd} will be {0:f1} Degrees C", interpreter.CalcAverageForecastTemp(fc, days[0]), days[0]));
             }
         }
+
+        static void processEyes(object mouth)
+        {
+            Console.WriteLine("Hi");
+
+        }
+
 
         
     }
