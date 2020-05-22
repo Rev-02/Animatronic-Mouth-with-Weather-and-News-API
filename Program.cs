@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Globalization;
+using System.Windows.Input;
 
 namespace ttsApp
 {
@@ -18,7 +19,7 @@ namespace ttsApp
         static void Main(string [] args)
         {
             ParameterizedThreadStart Eyes = new ParameterizedThreadStart(processEyes);
-            Mouth m = new Mouth("COM4", "Microsoft David Desktop");
+            Mouth m = new Mouth("Microsoft David Desktop");
             // start them  
             Thread Eyethread = new Thread(Eyes);
             Eyethread.Start(m);
@@ -27,6 +28,7 @@ namespace ttsApp
 
         static void MainLoop(object mouth)
         {
+            Mouth m = (Mouth)mouth;
             reader keyreader = new reader();
             string[] keys = keyreader.ReadKeys();
             
@@ -34,7 +36,6 @@ namespace ttsApp
             OWMForecast oWMForecast = new OWMForecast(keys[1]);
             OWMCurrent oWM = new OWMCurrent(keys[1]);
             Interpreter interpreter = new Interpreter();
-            m.POST();
             string intext;
             while (true)
             {
