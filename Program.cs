@@ -22,7 +22,10 @@ namespace ttsApp
             Mouth m = new Mouth("Microsoft David Desktop");
             // start them  
             Thread Eyethread = new Thread(Eyes);
-            Eyethread.Start(m);
+            //Eyethread.Start(m);
+            FaceController faceController = new FaceController("COM22", 115200);
+            faceController.POST();
+            Console.ReadKey();
             
         }
 
