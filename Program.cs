@@ -18,7 +18,7 @@ namespace ttsApp
 
         static void Main(string [] args)
         {
-            ParameterizedThreadStart Eyes = new ParameterizedThreadStart(processEyes);
+            ParameterizedThreadStart Eyes = new ParameterizedThreadStart(MainLoop);
             Mouth m = new Mouth("Microsoft David Desktop");
             // start them  
             Thread Eyethread = new Thread(Eyes);
