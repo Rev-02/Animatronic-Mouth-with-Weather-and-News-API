@@ -23,7 +23,7 @@ namespace ttsApp
             // start them  
             Thread Eyethread = new Thread(Eyes);
             //Eyethread.Start(m);
-            FaceController faceController = new FaceController("COM22", 115200);
+            FaceController faceController = new FaceController("COM14", 115200);
             faceController.POST();
             Console.ReadKey();
             
