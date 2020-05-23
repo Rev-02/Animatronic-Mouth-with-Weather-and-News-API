@@ -66,7 +66,7 @@ namespace ttsApp
         public void synthVisemeReached(object sender, VisemeReachedEventArgs e)
         {
             port.WriteLine(Convert.ToString(positions[Convert.ToInt32(e.Viseme)]));
-            Console.WriteLine(e.Viseme);
+            //Console.WriteLine(e.Viseme);
             /*if (port.IsOpen)
             {
 
