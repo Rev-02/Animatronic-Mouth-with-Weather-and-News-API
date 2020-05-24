@@ -15,16 +15,25 @@ namespace ttsApp
 {
     class Program
     {
-
+        static Random random = new Random();
+        static FaceController faceController = new FaceController("COM14", 115200);
+        static Mouth m = new Mouth("Microsoft David Desktop");
+        static EyeController eyeController = new EyeController();
         static void Main(string [] args)
         {
-            ParameterizedThreadStart Eyes = new ParameterizedThreadStart(MainLoop);
-            Mouth m = new Mouth("Microsoft David Desktop");
+            ThreadStart Eyes = new ThreadStart(processEyes);
+            ThreadStart portwriter = new ThreadStart(writeData);
+            
+            
+            faceController.POST();
+
             // start them  
             Thread Eyethread = new Thread(Eyes);
-            //Eyethread.Start(m);
-            FaceController faceController = new FaceController("COM14", 115200);
-            faceController.POST();
+            Thread writerThread = new Thread(portwriter);
+            Eyethread.Start();
+            writerThread.Start();
+             
+            
             Console.ReadKey();
             
         }
@@ -117,10 +126,25 @@ namespace ttsApp
             }
         }
 
-        static void processEyes(object mouth)
+        static void processEyes()
         {
-            Console.WriteLine("Hi");
 
+            
+            while (true)
+            {
+                //eyeController.blink();
+                Thread.Sleep(1000);
+                eyeController.disco();
+            }
+        }
+
+        static void writeData()
+        {
+            while (true)
+            {
+                faceController.writeFace(m.PortQueue, eyeController.Eyes);
+                Thread.Sleep(1);
+            }
         }
 
 

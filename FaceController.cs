@@ -7,6 +7,7 @@ using System.Speech.Synthesis.TtsEngine;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace ttsApp
 {
@@ -25,13 +26,23 @@ namespace ttsApp
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                //throw;
+                throw;
             }
         }
 
-        public void writeFace(string mouthPos, int[] colorArray)
+        public void writeFace(string mouthPos, int[][] colorArray)
         {
-           
+            string writeData = "";
+            writeData += mouthPos+",";
+            for (int i=0; i < colorArray.Length; i++)
+            {
+                writeData += String.Join(",", colorArray[i]);
+                if(i!=colorArray.Length - 1)
+                {
+                    writeData += ",";
+                }
+            }
+            port.WriteLine(writeData);
         }
 
         public void POST()
