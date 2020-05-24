@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EyeController.cs" />
     <Compile Include="FaceController.cs" />
     <Compile Include="Interpreter.cs" />
     <Compile Include="Mouth.cs" />
