@@ -139,7 +139,7 @@ namespace ttsApp
             }
             else
             {
-                mouth.speakMsg(string.Format("The weather for {1:dddd} is {0}", interpreter.CalcAverageForecastTemp(fc, days[0]), days[0]));
+                mouth.speakMsg(string.Format("The weather for {1:dddd} is {0}", interpreter.CalcForecastMain(fc, days[0]), days[0]));
                 mouth.speakMsg(string.Format("The average temperature for {1:dddd} will be {0:f1} Degrees C", interpreter.CalcAverageForecastTemp(fc, days[0]), days[0]));
             }
         }
@@ -151,8 +151,17 @@ namespace ttsApp
             while (true)
             {
                 eyeController.blink();
+                if(random.Next(5) == 2)
+                {
+                    eyeController.blink();
+                    if(random.Next(10) == 10)
+                    {
+                        eyeController.blink();
+                    }
+                }
                 Thread.Sleep(random.Next(5000));
                 Thread.Sleep(1000);
+                //eyeController.disco();
             }
         }
 
@@ -166,12 +175,13 @@ namespace ttsApp
                 {
                     
                     faceController.writeFace(PortQueue, Eyes);
+                    
                 }
                 finally
                 {
                     eyelock.ExitReadLock();
                     mouthlock.ExitReadLock();
-                    Thread.Sleep(1);
+                    Thread.Sleep(5);
                 }
                 
             }
@@ -183,6 +193,7 @@ namespace ttsApp
             mouthlock.EnterWriteLock();
             try
             {
+                
                 PortQueue = e.Pos;
             }
             finally
@@ -206,7 +217,7 @@ namespace ttsApp
             }
             finally
             {
-                //Console.WriteLine("Escaped");
+                
                 eyelock.ExitWriteLock();
             }
 

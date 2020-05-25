@@ -30,8 +30,8 @@ namespace ttsApp
 
         public EyeController()
         {
-            Eyes[0] = new int[] { 0,0,127 };
-            Eyes[1] = new int[] { 0,0,127 };
+            Eyes[0] = new int[] { 0,120,50 };
+            Eyes[1] = new int[] { 0,120,50 };
         }
 
         public void setOne(int index,int[] colour)
@@ -88,7 +88,7 @@ namespace ttsApp
                     setOne(a, eye1);
 
                 }
-                Thread.Sleep(200);
+                Thread.Sleep(350);
             }
         }
 
