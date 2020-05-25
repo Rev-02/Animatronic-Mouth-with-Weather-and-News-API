@@ -10,37 +10,53 @@ using System.Security.Cryptography;
 using System.Threading;
 using System.Globalization;
 using System.Windows.Input;
+using System.ComponentModel.Design;
+using System.Diagnostics;
 
 namespace ttsApp
 {
     class Program
     {
-        static Random random = new Random();
-        static FaceController faceController = new FaceController("COM14", 115200);
-        static Mouth m = new Mouth("Microsoft David Desktop");
-        static EyeController eyeController = new EyeController();
+        private static Random random; 
+        private static FaceController faceController;
+        private static Mouth m;
+        private static EyeController eyeController;
+        private static ReaderWriterLockSlim mouthlock = new ReaderWriterLockSlim();
+        private static ReaderWriterLockSlim eyelock = new ReaderWriterLockSlim();
+        private static int[][] Eyes = new int[2][];
+        private static string PortQueue = "0"; 
         static void Main(string [] args)
         {
-            ThreadStart Eyes = new ThreadStart(processEyes);
+            random = new Random();
+            faceController = new FaceController("COM4", 115200);
+            m = new Mouth("Microsoft David Desktop");
+            eyeController = new EyeController();
+
+            ThreadStart eyethread = new ThreadStart(processEyes);
             ThreadStart portwriter = new ThreadStart(writeData);
-            
+            ThreadStart main = new ThreadStart(MainLoop);
+            Eyes = eyeController.Eyes;
+            m.MouthPosChanged += mouthEventHandler;
+            eyeController.EyesChanged += writeEyevals;
             
             faceController.POST();
 
             // start them  
-            Thread Eyethread = new Thread(Eyes);
-            Thread writerThread = new Thread(portwriter);
-            Eyethread.Start();
-            writerThread.Start();
-             
             
-            Console.ReadKey();
+            Thread writerThread = new Thread(portwriter);
+            Thread interfaceThread = new Thread(main);
+            Thread Eyethread = new Thread(eyethread);
+            
+            writerThread.Start();
+            Thread.Sleep(3000);
+            interfaceThread.Start();
+            Eyethread.Start();
             
         }
 
-        static void MainLoop(object mouth)
+        static void MainLoop()
         {
-            Mouth m = (Mouth)mouth;
+            
             reader keyreader = new reader();
             string[] keys = keyreader.ReadKeys();
             
@@ -48,11 +64,13 @@ namespace ttsApp
             OWMForecast oWMForecast = new OWMForecast(keys[1]);
             OWMCurrent oWM = new OWMCurrent(keys[1]);
             Interpreter interpreter = new Interpreter();
-            string intext;
+            
             while (true)
             {
-                Console.Write("Press 1 for Full Update, 2 for news, 3 for weather \t");
+                string intext = "";
+                Console.WriteLine("Press 1 for Full Update, 2 for news, 3 for weather");
                 intext = Console.ReadLine();
+                Console.WriteLine(intext);
                 switch (intext)
                 {
                     default:
@@ -132,9 +150,9 @@ namespace ttsApp
             
             while (true)
             {
-                //eyeController.blink();
+                eyeController.blink();
+                Thread.Sleep(random.Next(5000));
                 Thread.Sleep(1000);
-                eyeController.disco();
             }
         }
 
@@ -142,12 +160,59 @@ namespace ttsApp
         {
             while (true)
             {
-                faceController.writeFace(m.PortQueue, eyeController.Eyes);
-                Thread.Sleep(1);
+                eyelock.EnterReadLock();
+                mouthlock.EnterReadLock();
+                try
+                {
+                    
+                    faceController.writeFace(PortQueue, Eyes);
+                }
+                finally
+                {
+                    eyelock.ExitReadLock();
+                    mouthlock.ExitReadLock();
+                    Thread.Sleep(1);
+                }
+                
             }
         }
 
+        public static void mouthEventHandler(object sender, MouthPosChangedEventArgs e)
+        {
+            
+            mouthlock.EnterWriteLock();
+            try
+            {
+                PortQueue = e.Pos;
+            }
+            finally
+            {
+                mouthlock.ExitWriteLock();
+            }
+            
+        }
+
+        public static void writeEyevals(object sender, EyesChangedEventArgs e)
+        {
+            eyelock.EnterWriteLock();
+            try
+            {
+                Eyes = e.Eyes;
+
+            }
+            catch
+            {
+                Console.WriteLine("Escaped");
+            }
+            finally
+            {
+                //Console.WriteLine("Escaped");
+                eyelock.ExitWriteLock();
+            }
+
+        }
 
         
+
     }
 }

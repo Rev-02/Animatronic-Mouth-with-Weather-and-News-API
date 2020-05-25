@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -13,6 +14,8 @@ namespace ttsApp
     {
         public int[][] Eyes { get; private set; } = new int[2][];
         Random random = new Random();
+        public delegate void ThresholdReachedEventHandler(object sender, EyesChangedEventArgs e);
+
         public EyeController(int[] eye1, int[] eye2)
         {
             Eyes[0] = eye1;
@@ -27,17 +30,22 @@ namespace ttsApp
 
         public EyeController()
         {
-            Eyes[0] = new int[] { 0, 0, 0 };
-            Eyes[1] = new int[] { 0, 0, 0 };
+            Eyes[0] = new int[] { 0,0,127 };
+            Eyes[1] = new int[] { 0,0,127 };
         }
 
         public void setOne(int index,int[] colour)
         {
+            //int[] previous = Eyes[index];
+            //TODO: add checking to see if previous val == current val
             for (int i = 0; i<3;i++)
             {
                 Eyes[index][i] = colour[i];
             }
-
+            EyesChangedEventArgs args = new EyesChangedEventArgs();
+            args.Eyes = Eyes;
+            OnEyesChanged(args);
+            
         }
 
         public void setBoth(int[] colour)
@@ -50,15 +58,19 @@ namespace ttsApp
 
         public void blink()
         {
-            int[][] previousCol = new int[2][];
-            previousCol = Eyes;
+            int[][] previousCol  = new int[][] { new int[]{ 0, 0, 0 }, new int[]{ 0, 0, 0 } };
+            for (int i = 0; i < 2; i++)
+            {
+                for (int b = 0; b < Eyes[i].Length; b++)
+                {
+                    previousCol[i][b] = Eyes[i][b];
+                }
+            }
             int[] black = { 0, 0, 0 };
             setBoth(black);
-            Thread.Sleep(750);
-            for(int i =0; i<previousCol.Length;i++)
-            {
-                setOne(i, previousCol[i]);
-            }
+            Thread.Sleep(600);
+            setOne(0,previousCol[0]);
+            setOne(1,previousCol[1]);
 
         }
 
@@ -79,5 +91,17 @@ namespace ttsApp
                 Thread.Sleep(200);
             }
         }
+
+        protected virtual void OnEyesChanged(EyesChangedEventArgs e)
+        {
+            EventHandler<EyesChangedEventArgs> handler = EyesChanged;
+            handler?.Invoke(this, e);
+        }
+
+        public event EventHandler<EyesChangedEventArgs> EyesChanged;
+    }
+    public class EyesChangedEventArgs : EventArgs
+    {
+        public int[][] Eyes { get; set; }
     }
 }

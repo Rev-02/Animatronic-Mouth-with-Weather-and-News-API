@@ -286,6 +286,7 @@ namespace ttsApp
 
         public ForecastData ForeCastWeatherData(string Longitude, string Latitude)
         {
+
             string urlParameters = "?lon=" + Longitude + "&lat=" + Latitude + "&appid=" + Key;
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(BASE + EXTENSION);
@@ -312,4 +313,5 @@ namespace ttsApp
 
         }
     }
-}   
+}
+//TODO: Add other weather conditions

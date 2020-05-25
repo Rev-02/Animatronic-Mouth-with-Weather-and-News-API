@@ -14,7 +14,9 @@ namespace ttsApp
         private int[] positions = new int[21];
         SpeechSynthesizer speak = new SpeechSynthesizer();
         public string voice { get; set;  }
-        public string PortQueue { get; private set; }
+        
+        public delegate void ThresholdReachedEventHandler(object sender, MouthPosChangedEventArgs e);
+        private int lastViseme = 0;
 
         public  Mouth(string Voice)
         {
@@ -37,7 +39,26 @@ namespace ttsApp
 
         public void synthVisemeReached(object sender, VisemeReachedEventArgs e)
         {
-            PortQueue = Convert.ToString(positions[Convert.ToInt32(e.Viseme)]);
+            if (e.Viseme != lastViseme)
+            {
+                lastViseme = e.Viseme;
+                MouthPosChangedEventArgs args = new MouthPosChangedEventArgs();
+                args.Pos = (Convert.ToString(positions[Convert.ToInt32(e.Viseme)]));
+                OnMouthPosChanged(args);
+            }
         }
+
+        protected virtual void OnMouthPosChanged(MouthPosChangedEventArgs e)
+        {
+            EventHandler<MouthPosChangedEventArgs> handler = MouthPosChanged;
+            handler?.Invoke(this, e);
+        }
+
+        public event EventHandler<MouthPosChangedEventArgs> MouthPosChanged;
+    }
+
+    public class MouthPosChangedEventArgs : EventArgs
+    {
+        public string Pos { get; set; }
     }
 }

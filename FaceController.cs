@@ -15,7 +15,7 @@ namespace ttsApp
     {
         private static SerialPort port;
         private bool portSuccesful = false;
-
+        private string lastWrite = "";
         public FaceController(string portName, int baudRate)
         {
             port = new SerialPort(portName, baudRate);
@@ -42,7 +42,11 @@ namespace ttsApp
                     writeData += ",";
                 }
             }
-            port.WriteLine(writeData);
+            if (writeData != lastWrite)
+            {
+                lastWrite = writeData;
+                port.WriteLine(writeData);
+            }
         }
 
         public void POST()
