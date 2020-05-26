@@ -106,9 +106,6 @@ namespace ttsApp
             
             ForecastData fc = oWMForecast.ForeCastWeahterData("cv5", "GB", "Coventry", 1);
             
-            List<DateTime> days = new List<DateTime>();
-            days = interpreter.containsDays(fc);
-
             
             try
             {
@@ -120,27 +117,7 @@ namespace ttsApp
                 Console.WriteLine(e.Message);
             }
 
-            DateTime nowtime = DateTime.Now;
-            bool today = false;
-            foreach (var day in days)
-            {
-                if (day.Day == nowtime.Day)
-                {
-                    today = true;
-                    mouth.speakMsg(string.Format("The average temperature today will be {0:f1} Degrees C", interpreter.CalcAverageForecastTemp(fc, day)));
-                    mouth.speakMsg(string.Format("The forecast for later today will be {0} .", interpreter.CalcForecastMain(fc, day)));
-                }
-            }
-            if (today)
-            {
-                mouth.speakMsg(string.Format("The weather for tommorow is {0}", interpreter.CalcForecastMain(fc, days[1])));
-                mouth.speakMsg(string.Format("The average temperature tomorrow will be {0:f1} Degrees C", interpreter.CalcAverageForecastTemp(fc, days[1])));
-            }
-            else
-            {
-                mouth.speakMsg(string.Format("The weather for {1:dddd} is {0}", interpreter.CalcForecastMain(fc, days[0]), days[0]));
-                mouth.speakMsg(string.Format("The average temperature for {1:dddd} will be {0:f1} Degrees C", interpreter.CalcAverageForecastTemp(fc, days[0]), days[0]));
-            }
+            mouth.speakMsg(interpreter.ForecastSummary(fc));
         }
 
         static void processEyes()
@@ -226,3 +203,5 @@ namespace ttsApp
 
     }
 }
+//TODO: Remove bad Comments
+//TODO: Comment Code properly

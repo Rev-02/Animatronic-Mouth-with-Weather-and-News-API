@@ -133,12 +133,52 @@ namespace ttsApp
                 oWMCurrent.weather[0].description,oWMCurrent.wind.speed,UnixTimeStampToDateTime(oWMCurrent.sys.sunset));
             return returnData;
         }
+
+        public string ForecastSummary(ForecastData fc)
+        {
+            List<DateTime> days = new List<DateTime>();
+            days = containsDays(fc);
+            DateTime nowtime = DateTime.Now;
+            bool today = false;
+            StringBuilder returnString = new StringBuilder();
+            foreach (var day in days)
+            {
+                if (day.Day == nowtime.Day)
+                {
+                    today = true;
+                    returnString.AppendLine(string.Format("The average temperature for {1} today will be {0:f1} Degrees C.", CalcAverageForecastTemp(fc, day), AtLocation(fc)));
+                    returnString.AppendLine(string.Format("The forecast for later today will be {0} .", CalcForecastMain(fc, day)));
+                }
+            }
+            if (today)
+            {
+                returnString.AppendLine(string.Format("The weather for {1} tommorow is {0}.", CalcForecastMain(fc, days[1]), AtLocation(fc)));
+                returnString.AppendLine(string.Format("The average temperature tomorrow will be {0:f1} Degrees C", CalcAverageForecastTemp(fc, days[1])));
+            }
+            else
+            {
+                returnString.AppendLine(string.Format("The weather for {1:dddd} is {0}", CalcForecastMain(fc, days[0]), days[0]));
+                returnString.AppendLine(string.Format("The average temperature for {1:dddd} will be {0:f1} Degrees C", CalcAverageForecastTemp(fc, days[0]), days[0]));
+            }
+            return returnString.ToString();
+        }
+
         public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
         {
             // Unix timestamp is seconds past epoch
             System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
             return dtDateTime;
+        }
+
+        public string AtLocation(CurrentWeather oWMCurrent)
+        {
+            return oWMCurrent.name;
+        }
+
+        public string AtLocation(ForecastData forecastData)
+        {
+            return forecastData.city.name;
         }
 
     }

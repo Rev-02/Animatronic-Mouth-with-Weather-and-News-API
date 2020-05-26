@@ -68,7 +68,7 @@ namespace ttsApp
             }
             int[] black = { 10, 10, 10 };
             setBoth(black);
-            Thread.Sleep(600);
+            Thread.Sleep(400);
             setOne(0,previousCol[0]);
             setOne(1,previousCol[1]);
 
