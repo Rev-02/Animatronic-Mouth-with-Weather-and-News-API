@@ -8,7 +8,7 @@
 
 ### Uses an Arduino with 2 neopixles and a servo.
 * The arduino is sent the data to move position and change eye color over the serial port.
-* The sequence of instructions is split by he arduino.
+* The sequence of instructions is split by the arduino.
 * Serial commands are only sent when there is a change in instruction - to avoid overloading the serial buffer.
 
 ### Connected APIs
