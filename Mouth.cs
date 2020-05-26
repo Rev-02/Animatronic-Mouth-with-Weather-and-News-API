@@ -11,46 +11,20 @@ namespace ttsApp
 {
     class Mouth
     {
-        static SerialPort port;
         private int[] positions = new int[21];
         SpeechSynthesizer speak = new SpeechSynthesizer();
         public string voice { get; set;  }
+        
+        public delegate void ThresholdReachedEventHandler(object sender, MouthPosChangedEventArgs e);
+        private int lastViseme = 0;
 
-        public  Mouth(string portNum, string Voice)
+        public  Mouth(string Voice)
         {
             voice = Voice;
             speak.SetOutputToDefaultAudioDevice();
             speak.VisemeReached += new EventHandler<VisemeReachedEventArgs>(synthVisemeReached);
             reader rdr = new reader();
             positions = rdr.ReadFile();
-            try
-            {
-                port = new SerialPort(portNum, 115200);
-                port.Open();
-            }
-            catch (Exception e)
-            {
-
-                Console.WriteLine(e.Message);
-                
-            }
-        }
-
-        public void POST()
-        {
-            try
-            {
-                port.WriteLine("120");
-                Thread.Sleep(1500);
-                port.WriteLine("0");
-
-            }
-            catch (Exception e)
-            {
-
-                Console.WriteLine(e.Message);
-            }
-            
         }
 
         public void speakMsg(string Message)
@@ -65,18 +39,26 @@ namespace ttsApp
 
         public void synthVisemeReached(object sender, VisemeReachedEventArgs e)
         {
-            port.WriteLine(Convert.ToString(positions[Convert.ToInt32(e.Viseme)]));
-            //Console.WriteLine(e.Viseme);
-            /*if (port.IsOpen)
+            if (e.Viseme != lastViseme)
             {
-
-                port.WriteLine(Convert.ToString(positions[Convert.ToInt32(e.Viseme)]));
+                lastViseme = e.Viseme;
+                MouthPosChangedEventArgs args = new MouthPosChangedEventArgs();
+                args.Pos = (Convert.ToString(positions[Convert.ToInt32(e.Viseme)]));
+                OnMouthPosChanged(args);
             }
-            else
-            {
-                Console.WriteLine("Error");
-                throw new System.InvalidOperationException("mouth is not connected, invalid operation");
-            }*/
         }
+
+        protected virtual void OnMouthPosChanged(MouthPosChangedEventArgs e)
+        {
+            EventHandler<MouthPosChangedEventArgs> handler = MouthPosChanged;
+            handler?.Invoke(this, e);
+        }
+
+        public event EventHandler<MouthPosChangedEventArgs> MouthPosChanged;
+    }
+
+    public class MouthPosChangedEventArgs : EventArgs
+    {
+        public string Pos { get; set; }
     }
 }
