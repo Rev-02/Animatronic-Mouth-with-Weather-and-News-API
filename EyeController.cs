@@ -66,7 +66,7 @@ namespace ttsApp
                     previousCol[i][b] = Eyes[i][b];
                 }
             }
-            int[] black = { 0, 0, 0 };
+            int[] black = { 10, 10, 10 };
             setBoth(black);
             Thread.Sleep(600);
             setOne(0,previousCol[0]);
