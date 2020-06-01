@@ -66,7 +66,7 @@ namespace ttsApp
                         {
 
                             colArr[i] = b;
-                            //writeString = "0" + "," + colArr[0] + ":" + colArr[1] + ":" + colArr[2] + ";" + colArr[0] + ":" + colArr[1] + ":" + colArr[2];
+                            
                             writeString = string.Format("0,{0},{1},{2},{3},{4},{5}", colArr[0], colArr[1], colArr[2], colArr[3], colArr[4], colArr[5]);
                             port.WriteLine(writeString);
                             Thread.Sleep(010);

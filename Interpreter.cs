@@ -29,8 +29,7 @@ namespace ttsApp
             }
             if (flag)
             {
-                //Console.WriteLine(total);
-                //Console.WriteLine(items);
+                
                 return (total / items) -273.15;
             }
             else

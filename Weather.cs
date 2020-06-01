@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 
 namespace ttsApp
 {
@@ -59,6 +60,22 @@ namespace ttsApp
         public int sunset { get; set; }
     }
 
+    public class Rain
+    {
+        [JsonProperty("1h")]
+        public int oneHour { get; set; }
+        [JsonProperty("3h")]
+        public int threeHour { get; set; }
+    }
+
+    public class Snow
+    {
+        [JsonProperty("1h")]
+        public int oneHour { get; set; }
+        [JsonProperty("3h")]
+        public int threeHour { get; set; }
+    }
+
     public class CurrentWeather
     {
         public Coord coord { get; set; }
@@ -67,6 +84,8 @@ namespace ttsApp
         public Main main { get; set; }
         public Wind wind { get; set; }
         public Clouds clouds { get; set; }
+        public Rain rain { get; set; }
+        public Snow snow { get; set; }
         public int dt { get; set; }
         public Sys sys { get; set; }
         public int timezone { get; set; }
@@ -74,10 +93,7 @@ namespace ttsApp
         public string name { get; set; }
         public int cod { get; set; }
 
-        public void hello()
-        {
-            Console.WriteLine("hello");
-        }
+       
     }
 
 
@@ -184,8 +200,7 @@ namespace ttsApp
             }
             else
             {
-                //Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                //Dispose once all HttpClient calls are complete. This is not necessary if the containing object will be disposed of; for example in this case the HttpClient instance will be disposed automatically when the application terminates so the following call is superfluous.
+                
                 client.Dispose();
                 Exception newEx = new Exception((int)response.StatusCode + " : " + response.ReasonPhrase);
                 throw newEx;
@@ -314,4 +329,3 @@ namespace ttsApp
         }
     }
 }
-//TODO: Add other weather conditions
