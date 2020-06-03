@@ -28,7 +28,7 @@ namespace ttsApp
         static void Main(string [] args)
         {
             random = new Random();
-            faceController = new FaceController("COM4", 115200);
+            faceController = new FaceController("COM11", 115200);
             m = new Mouth("Microsoft David Desktop");
             eyeController = new EyeController();
 
