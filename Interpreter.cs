@@ -127,6 +127,7 @@ namespace ttsApp
 
         public string CurrentSummary(CurrentWeather oWMCurrent)
         {
+            //TODO: Current Summary and Forecast Summaries
             string returnData;
             returnData = string.Format("The current temperature is {0:f1} Degrees C,  and the weather is {1}, the windspeed is {2}, and sunset is {3:hh}:{3:mm}.", oWMCurrent.main.temp,
                 oWMCurrent.weather[0].description, oWMCurrent.wind.speed, UnixTimeStampToDateTime(oWMCurrent.sys.sunset));

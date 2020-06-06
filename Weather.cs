@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
+using System.Security.Policy;
 
 namespace ttsApp
 {
@@ -63,17 +64,17 @@ namespace ttsApp
     public class Rain
     {
         [JsonProperty("1h")]
-        public int oneHour { get; set; }
+        public string oneHour { get; set; }
         [JsonProperty("3h")]
-        public int threeHour { get; set; }
+        public string threeHour { get; set; }
     }
 
     public class Snow
     {
         [JsonProperty("1h")]
-        public int oneHour { get; set; }
+        public string oneHour { get; set; }
         [JsonProperty("3h")]
-        public int threeHour { get; set; }
+        public string threeHour { get; set; }
     }
 
     public class CurrentWeather
@@ -95,12 +96,100 @@ namespace ttsApp
 
         public bool IsRain()
         {
-            return true;
+            if (rain is null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
+
+        public bool IsRain1h()
+        {
+            if (IsRain())
+            {
+                if (rain.oneHour is null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }      
+        public bool IsRain3h()
+        {
+            if (IsRain())
+            {
+                if (rain.threeHour is null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }      
         
+        public bool IsSnow1h()
+        {
+            if (IsSnow())
+            {
+                if (snow.oneHour is null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }      
+        public bool IsSnow3h()
+        {
+            if (IsSnow())
+            {
+                if (snow.threeHour is null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }      
+            
         public bool IsSnow()
         {
-            return true;
+            if (snow is null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
        
     }
@@ -229,7 +318,7 @@ namespace ttsApp
             {
                 urlParameters = "?q=" + cityname + "," + countrycode + "&units=metric"+"&appid=" + Key ;
             }
-
+            Console.WriteLine(urlParameters);
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(BASE + EXTENSION);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -245,6 +334,7 @@ namespace ttsApp
             }
             else if ((int)response.StatusCode == 404 && mode == 1)
             {
+                Console.WriteLine("postcode error");
                 return GetCurrent(postcode, countrycode, cityname, 2);
             }
             else
@@ -253,6 +343,8 @@ namespace ttsApp
                 //Dispose once all HttpClient calls are complete. This is not necessary if the containing object will be disposed of; for example in this case the HttpClient instance will be disposed automatically when the application terminates so the following call is superfluous.
                 client.Dispose();
                 Exception newEx = new Exception((int)response.StatusCode + " : " + response.ReasonPhrase);
+                Console.WriteLine("Error");
+                Console.WriteLine((int)response.StatusCode);
                 throw newEx;
             }
         }
