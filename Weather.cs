@@ -318,7 +318,6 @@ namespace ttsApp
             {
                 urlParameters = "?q=" + cityname + "," + countrycode + "&units=metric"+"&appid=" + Key ;
             }
-            Console.WriteLine(urlParameters);
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(BASE + EXTENSION);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -334,7 +333,6 @@ namespace ttsApp
             }
             else if ((int)response.StatusCode == 404 && mode == 1)
             {
-                Console.WriteLine("postcode error");
                 return GetCurrent(postcode, countrycode, cityname, 2);
             }
             else

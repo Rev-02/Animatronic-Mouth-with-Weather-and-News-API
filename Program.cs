@@ -28,7 +28,7 @@ namespace ttsApp
         static void Main(string [] args)
         {
             random = new Random();
-            faceController = new FaceController("COM11", 115200);
+            faceController = new FaceController("COM3", 115200);
             m = new Mouth("Microsoft David Desktop");
             eyeController = new EyeController();
 
@@ -109,7 +109,7 @@ namespace ttsApp
             
             try
             {
-                var returned = oWM.GetCurrent("cv59el", "GB", "London", 1);
+                var returned = oWM.GetCurrent("cv5", "GB", "Coventry", 1);
                 mouth.speakMsg(string.Format(interpreter.CurrentSummary(returned)));
             }
             catch (Exception e)

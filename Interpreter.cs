@@ -127,11 +127,34 @@ namespace ttsApp
 
         public string CurrentSummary(CurrentWeather oWMCurrent)
         {
-            //TODO: Current Summary and Forecast Summaries
-            string returnData;
-            returnData = string.Format("The current temperature is {0:f1} Degrees C,  and the weather is {1}, the windspeed is {2}, and sunset is {3:hh}:{3:mm}.", oWMCurrent.main.temp,
-                oWMCurrent.weather[0].description, oWMCurrent.wind.speed, UnixTimeStampToDateTime(oWMCurrent.sys.sunset));
-            return returnData;
+            StringBuilder returnString = new StringBuilder();
+            returnString.AppendLine(string.Format("The current temperature is {0:f1} Degrees C, and the weather in {1} is currently:", oWMCurrent.main.temp, AtLocation(oWMCurrent)));
+                   
+            for (int i = 0; i < oWMCurrent.weather.Count; i++)
+            {
+                if (i < oWMCurrent.weather.Count - 1)
+                {
+                    returnString.AppendLine(oWMCurrent.weather[i].description);
+                    returnString.AppendLine("With:");
+                }
+                else
+                {
+                    returnString.AppendLine(oWMCurrent.weather[i].description);
+                }
+            }
+
+            if (oWMCurrent.IsRain1h())
+            {
+                returnString.AppendLine(string.Format(". The volume of rain in the last hour was {0} mm.",oWMCurrent.rain.oneHour));
+            }
+            if (oWMCurrent.IsSnow1h())
+            {
+                returnString.AppendLine(string.Format(". The volume of snow in the last hour was {0} mm.",oWMCurrent.snow.oneHour));
+            }
+            returnString.AppendLine(string.Format("the windspeed is {0} metres per second , and sunset is {1:hh}:{1:mm}.", oWMCurrent.wind.speed, UnixTimeStampToDateTime(oWMCurrent.sys.sunset)));
+
+
+            return returnString.ToString();
         }
 
         public string ForecastSummary(ForecastData fc)
