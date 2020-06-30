@@ -390,8 +390,6 @@ namespace ttsApp
             }
             else
             {
-                //Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                //Dispose once all HttpClient calls are complete. This is not necessary if the containing object will be disposed of; for example in this case the HttpClient instance will be disposed automatically when the application terminates so the following call is superfluous.
                 client.Dispose();
                 Exception newEx = new Exception((int)response.StatusCode + " : " + response.ReasonPhrase);
                 throw newEx;
@@ -417,8 +415,6 @@ namespace ttsApp
             }
             else
             {
-                //Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                //Dispose once all HttpClient calls are complete. This is not necessary if the containing object will be disposed of; for example in this case the HttpClient instance will be disposed automatically when the application terminates so the following call is superfluous.
                 client.Dispose();
                 Exception newEx = new Exception((int)response.StatusCode + " : " + response.ReasonPhrase);
                 throw newEx;

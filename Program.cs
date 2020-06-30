@@ -68,7 +68,7 @@ namespace ttsApp
             while (true)
             {
                 string intext = "";
-                Console.WriteLine("Press 1 for Full Update, 2 for news, 3 for weather");
+                Console.Write("Press 1 for Full Update, 2 for news, 3 for weather \t");
                 intext = Console.ReadLine();
                 switch (intext)
                 {
@@ -109,7 +109,8 @@ namespace ttsApp
             
             try
             {
-                var returned = oWM.GetCurrent("cv5", "GB", "Coventry", 1);
+                //var returned = oWM.GetCurrent("cv5", "GB", "Coventry", 1);
+                var returned = oWM.GetCurrent("cv5", "GB", "Coventry", 2);
                 mouth.speakMsg(string.Format(interpreter.CurrentSummary(returned)));
             }
             catch (Exception e)

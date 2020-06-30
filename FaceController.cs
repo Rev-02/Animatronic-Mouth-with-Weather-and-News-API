@@ -82,7 +82,6 @@ namespace ttsApp
             }
             else
             {
-                //TODO: remove debug console prints 
                 Console.WriteLine("120,0,0,0,0,0,0");
                 Thread.Sleep(1500);
                 Console.WriteLine("0,0,0,0,0,0,0");
@@ -94,7 +93,6 @@ namespace ttsApp
                     {
 
                         colArr[i] = b;
-                        //writeString = "0" + "," + colArr[0] + ":" + colArr[1] + ":" + colArr[2] + ";" + colArr[0] + ":" + colArr[1] + ":" + colArr[2];
                         writeString = string.Format("0,{0},{1},{2},{0},{1},{2}", colArr[0], colArr[1], colArr[2]);
                         Console.WriteLine(writeString);
                     }
